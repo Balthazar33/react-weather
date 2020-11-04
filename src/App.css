@@ -1,5 +1,19 @@
 .App {
-  text-align: center;
+  border-radius: 20px;
+    text-align: center;
+    padding: 20px 10px;
+    max-width: 300px;
+    overflow: hidden;
+    margin: 20px auto;
+    font-family: sans-serif;
+    background: repeating-linear-gradient(50deg, #a15959, #2a2928 100px);
+}
+
+.bg-cold{
+  background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)),url('../src/assets/temp-cold.jpg');
+}
+.bg-hot{
+  background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)),url('../src/assets/temp-hot.jpg');
 }
 
 .App-logo {
