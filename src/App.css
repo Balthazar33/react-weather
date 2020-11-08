@@ -16,9 +16,15 @@
   background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)),url('../src/assets/temp-hot.jpg');
 }
 
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+@keyframes fadeIn{
+  0%{opacity: 0;}
+  100%{opacity: 1;}
 }
 
 @media (prefers-reduced-motion: no-preference) {

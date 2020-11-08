@@ -1,4 +1,5 @@
 import React from 'react'
+import { CSSTransition } from 'react-transition-group';     
 // import tempColdImage from '../assets/temp-cold.jpg'
 // import tempHotImage from '../assets/temp-hot.jpg'
 
@@ -16,12 +17,13 @@ class MainData extends React.Component{
 
     render(){
         const temperatures = {
-            temp_min:this.props.data.main.temp_min-273.15,
-            temp_max:this.props.data.main.temp_max-273.15,
-            feels_like:this.props.data.main.feels_like-273.15
+            temp_min:this.props.data.temp_min-273.15,
+            temp_max:this.props.data.temp_max-273.15,
+            feels_like:this.props.data.feels_like-273.15
         }
-        const weatherDesc = this.props.data.weather[0].description;
+        const weatherDesc = this.props.desc;
         return(
+            <CSSTransition timeout={300}>
             <div className={temperatures.temp_min<=15 ? 'app_content bg-cold':'app_content bg-hot'}>
                 <h2>{this.props.city}</h2>
                 <h3 className="current_temp">{temperatures.temp_min.toFixed()}<sup>o</sup>C</h3>
@@ -30,6 +32,7 @@ class MainData extends React.Component{
                    <p>{this.toCapitalCase(weatherDesc)} </p>
                 </div>
             </div>
+            </CSSTransition>
         )
     }
 }

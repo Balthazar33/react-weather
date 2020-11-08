@@ -3,57 +3,69 @@ import '../src/assets/resetcss.css'
 import Header from './components/Header.js'
 import React from 'react'
 import MainData from './components/MainData.js'
-import data from './assets/db.json'
+import Loader from './components/UI/loader'
+// import data from './assets/db.json'
 class App extends React.Component {
 
   constructor(){
     super();
     this.state = {
       currentCity:'Mumbai',
-      weatherData:data['Mumbai'],
+      weatherData:{},
+      description:""
     }
   }
   
  
 
-  // componentDidMount(){
+  componentDidMount(){
   // const fetchUrl = 'db.json';
-  // // const fetchUrlActual = "http://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=1a424f910f39113093829778b57db658";
-  // fetch(fetchUrl)
-  //   .then(response=> {
-  //     if(!response.ok){
-  //       alert("error");
-  //     }
-  //     response = response.json();
-  //   })
-  //   .then(data=>{
-  //     this.setState({
-  //       currentCity:'Mumbai',
-  //       weatherData:data
-  //     });
-  //     console.log("state",data)
-  //   });
-  // }
+  const fetchUrlActual = "http://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=1a424f910f39113093829778b57db658";
+  fetch(fetchUrlActual)
+    .then(response=> {
+      if(!response.ok){
+        const err = new Error(response.message || "Something went wrong");
+        alert(err);
+        return;
+      }
+   return response.json();
+    })
+    .then(data=>{
+      this.setState({
+        currentCity:'Mumbai',
+        weatherData:data.main,
+        description:data.weather[0].description
+      });
+    })
+    .catch(err=>{
+      alert(err);
+    })
+  }
 
    fetchCityWeather=(city)=>{
-    // fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=1a424f910f39113093829778b57db658`)
-    // .then(response=>response.json())
-    // .then(data=>{
-    //   this.setState({
-    //     currentCity:city,
-    //     weatherData:data.main
-    //   })
-    //   // this.forceUpdate();
-    // })
-
-    this.setState({
-      currentCity:city,
-      weatherData:data[city]
+     const self = this;
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=1a424f910f39113093829778b57db658`)
+    .then(response=>{
+      if(!response.ok){
+        const err = new Error(response.message || "Something went wrong");
+        alert(err);
+      }
+      return response.json();
+    
     })
+    .then(data=>{
+      self.setState({
+        currentCity:city,
+        weatherData:data.main,
+        description:data.weather[0].description
+      })
+    })
+
   }
   
 
   render(){
+    const weather_data = this.state.weatherData;
     return (
       <div className="App">
         <Header/>
@@ -63,10 +75,14 @@ class App extends React.Component {
           <button className={this.state.currentCity==='Delhi'?'active' :''} onClick={()=>this.fetchCityWeather('Delhi')}>Delhi</button>
         </div>
 
-     
-        <MainData data={this.state.weatherData} city={this.state.currentCity} /> 
-             
-               
+        {weather_data.temp!==undefined &&
+            <MainData data={weather_data} desc={this.state.description} city={this.state.currentCity} />
+        }
+
+        {weather_data.temp===undefined &&
+          <Loader/>
+        }
+        
       </div>
     );
   }
