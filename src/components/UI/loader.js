@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-function Loader(){
+function Loader(props){
 
     return(
         <div className="loading_overlay">
             <dialog open>
-            <p>{this.props.message}</p>
+            <p>{props.message}</p>
             </dialog>
         </div>
     )
