@@ -12,7 +12,8 @@ class App extends React.Component {
     this.state = {
       currentCity:'Mumbai',
       weatherData:{},
-      description:""
+      description:"",
+      overlayMsg:"Loading..."
     }
   }
   
@@ -20,7 +21,7 @@ class App extends React.Component {
 
   componentDidMount(){
   // const fetchUrl = 'db.json';
-  const fetchUrlActual = "http://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=1a424f910f39113093829778b57db658";
+  const fetchUrlActual = "https://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=1a424f910f39113093829778b57db658";
   fetch(fetchUrlActual)
     .then(response=> {
       if(!response.ok){
@@ -39,12 +40,15 @@ class App extends React.Component {
     })
     .catch(err=>{
       alert(err);
-    })
+      this.setState({
+        overlayMsg:err
+      })
+    });
   }
 
    fetchCityWeather=(city)=>{
      const self = this;
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=1a424f910f39113093829778b57db658`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=1a424f910f39113093829778b57db658`)
     .then(response=>{
       if(!response.ok){
         const err = new Error(response.message || "Something went wrong");
@@ -59,6 +63,12 @@ class App extends React.Component {
         weatherData:data.main,
         description:data.weather[0].description
       })
+    })
+    .catch(err=>{
+      alert(err);
+      this.setState({
+        overlayMsg:err
+      });
     })
 
   }
@@ -80,7 +90,7 @@ class App extends React.Component {
         }
 
         {weather_data.temp===undefined &&
-          <Loader/>
+          <Loader message={this.state.overlayMsg}/>
         }
         
       </div>
